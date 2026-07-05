@@ -1,0 +1,294 @@
+.conversation {
+  background-color: $color-white;
+  height: 100%;
+  padding-left: 28rem;
+  display: flex;
+  flex-direction: column;
+
+  &.active {
+    display: flex;
+    flex-direction: column;
+  }
+
+  // ── Scrollable message area ──────────────────────────────────────────────
+  &__main {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 2.4rem 2rem;
+    background-color: $color-grey-light-2;
+    scroll-behavior: smooth;
+
+    &::-webkit-scrollbar { width: 4px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb {
+      background: rgba($color-primary, 0.3);
+      border-radius: 10px;
+      &:hover { background: rgba($color-primary, 0.55); }
+    }
+  }
+
+  // Message list — centered, max width
+  &__wrapper {
+    list-style-type: none;
+    max-width: 80rem;
+    margin: 0 auto;
+  }
+
+  // ── Message items ──────────────────────────────────────────────────────────
+  &__item {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: row-reverse;
+    margin-bottom: 1.2rem;
+
+    &--side   { margin-left: 8px; }
+    &--content { width: 100%; }
+    &--wrapper:not(:last-child) { margin-bottom: 0.6rem; }
+
+    &--wrapper:hover &--dropdown {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    &--box {
+      max-width: 76%;
+      position: relative;
+      margin-left: auto;
+    }
+
+    // User message bubble (right, flat bottom-right corner)
+    &--text {
+      padding: 1rem 1.4rem;
+      background-color: $color-primary;
+      color: white;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+      font-size: $default-font-size;
+      border-radius: 18px 18px 4px 18px;
+      line-height: 1.55;
+
+      // ── Markdown styles ──────────────────────────────────────────────────
+      p { margin: 0 0 0.6rem; &:last-child { margin-bottom: 0; } }
+      ul, ol { padding-left: 2rem; margin: 0.4rem 0 0.8rem; }
+      li { margin-bottom: 0.3rem; }
+      strong { font-weight: 700; }
+      em     { font-style: italic; }
+
+      h1, h2, h3, h4 {
+        margin: 0.8rem 0 0.3rem;
+        font-size: 1.7rem;
+        font-weight: 700;
+        color: inherit;
+      }
+      code {
+        background: rgba(0, 0, 0, 0.15);
+        border-radius: 4px;
+        padding: 0.1em 0.35em;
+        font-family: monospace;
+        font-size: 0.9em;
+      }
+      pre {
+        background: rgba(0, 0, 0, 0.12);
+        border-radius: 6px;
+        padding: 0.8rem 1rem;
+        overflow-x: auto;
+        margin: 0.6rem 0;
+        code { background: none; padding: 0; }
+      }
+      table { border-collapse: collapse; margin: 0.6rem 0; width: 100%; font-size: 1.45rem; }
+      th, td { border: 1px solid rgba(255, 255, 255, 0.35); padding: 0.35rem 0.7rem; text-align: left; }
+      th { font-weight: 700; background: rgba(0, 0, 0, 0.08); }
+      a { color: inherit; text-decoration: underline; }
+      blockquote {
+        border-left: 3px solid rgba(255, 255, 255, 0.5);
+        padding-left: 0.9rem;
+        margin: 0.5rem 0;
+        opacity: 0.9;
+      }
+      hr { border: none; border-top: 1px solid rgba(255,255,255,0.3); margin: 0.8rem 0; }
+    }
+
+    // Copy button
+    &--dropdown {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.15s ease-in-out, visibility 0.15s ease-in-out;
+
+      &-toggle {
+        width: 2.8rem;
+        height: 2.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        background-color: $color-white;
+        outline: none;
+        border: 1px solid $color-grey-light-3;
+        cursor: pointer;
+        transition: background-color 0.15s, color 0.15s, box-shadow 0.15s;
+        color: $color-grey-dark;
+        font-size: 1.3rem;
+
+        &:hover {
+          background-color: $color-primary;
+          color: $color-white;
+          border-color: $color-primary;
+          box-shadow: 0 2px 6px rgba($color-primary, 0.35);
+        }
+        &:active { background-color: $color-primary-dark; }
+      }
+    }
+  }
+
+  // ── AI messages (".me" class applied in AiMsg.js) ─────────────────────────
+  &__item.me {
+    flex-direction: row;
+  }
+  &__item.me &__item--box {
+    margin-left: unset;
+    margin-right: 0;
+  }
+  // AI bubble (left, flat bottom-left corner)
+  &__item.me &__item--text {
+    background-color: $color-text-ai;
+    box-shadow: 0 1px 4px rgba($color-primary-light, 0.25);
+    color: white;
+    border-radius: 18px 18px 18px 4px;
+  }
+  &__item.me &__item--dropdown {
+    left: unset;
+    right: 0;
+  }
+
+  // ── Typing indicator (three bouncing dots) ────────────────────────────────
+  .typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 1.2rem 1.6rem !important;
+    min-width: 5.6rem;
+
+    span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.85);
+      display: inline-block;
+      animation: typing-bounce 1.2s infinite ease-in-out;
+      &:nth-child(2) { animation-delay: 0.2s; }
+      &:nth-child(3) { animation-delay: 0.4s; }
+    }
+  }
+
+  @keyframes typing-bounce {
+    0%, 80%, 100% { transform: translateY(0);    opacity: 0.5; }
+    40%            { transform: translateY(-7px); opacity: 1;   }
+  }
+
+  // ── Form wrapper (contains prompts + input row) ───────────────────────────
+  &__form-area {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    background-color: $color-grey-light-2;
+    border-top: 1px solid rgba($color-primary, 0.12);
+  }
+
+  // ── Suggested prompts ─────────────────────────────────────────────────────
+  .suggested-prompts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    padding: 1.2rem 2rem 0.4rem;
+  }
+
+  .suggested-prompt-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1.1rem;
+    background: $color-white;
+    border: 1.5px solid rgba($color-primary, 0.45);
+    border-radius: 20px;
+    font-size: 1.35rem;
+    font-family: inherit;
+    color: darken($color-primary-dark, 5%);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+
+    &:hover:not(:disabled) {
+      background: $color-primary;
+      color: $color-white;
+      border-color: $color-primary;
+      box-shadow: 0 2px 8px rgba($color-primary, 0.3);
+    }
+    &:disabled { opacity: 0.4; cursor: not-allowed; }
+  }
+
+  .suggested-prompt-icon { font-size: 1.4rem; line-height: 1; }
+
+  // ── Input form ─────────────────────────────────────────────────────────────
+  &__form {
+    padding: 1rem 2rem 2.4rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 0.8rem;
+
+    &--group {
+      flex: 1;
+      min-width: 0;
+      position: relative;
+    }
+
+    &--input {
+      background-color: $color-white;
+      border-radius: 10px;
+      border: 2px solid rgba($color-primary, 0.35);
+      outline: none;
+      padding: 1rem 1.4rem;
+      font: inherit;
+      font-size: $default-font-size;
+      resize: none;
+      width: 100%;
+      display: block;
+      line-height: 1.5;
+      max-height: 14rem;
+      transition: border-color 0.15s, box-shadow 0.15s;
+
+      &:focus {
+        border-color: $color-primary;
+        box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+      }
+      &:disabled { opacity: 0.6; cursor: not-allowed; }
+    }
+
+    &--button {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      border: 2px solid $color-primary;
+      background-color: $color-primary;
+      outline: none;
+      font-size: 20px;
+      color: $color-white;
+      cursor: pointer;
+      transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+
+      &:hover:not(:disabled) {
+        background-color: $color-primary-dark;
+        border-color: $color-primary-dark;
+        box-shadow: 0 2px 8px rgba($color-primary, 0.4);
+      }
+      &:disabled { opacity: 0.4; cursor: not-allowed; }
+    }
+  }
+}

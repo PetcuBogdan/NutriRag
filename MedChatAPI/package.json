@@ -1,0 +1,35 @@
+{
+  "name": "licentachatapi",
+  "version": "1.0.0",
+  "description": "API pt stocare user si conversatii",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "npx nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PetcuBogdan/LicentaChatAPI.git"
+  },
+  "keywords": [
+    "chatApi"
+  ],
+  "author": "Petcu Bogdan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PetcuBogdan/LicentaChatAPI/issues"
+  },
+  "homepage": "https://github.com/PetcuBogdan/LicentaChatAPI#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "dotenv": "^17.4.2",
+    "express": "^4.19.1",
+    "express-validator": "^7.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.2.2",
+    "nodemailer": "^6.9.13",
+    "nodemon": "^3.1.0"
+  }
+}
