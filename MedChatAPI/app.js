@@ -27,8 +27,7 @@ app.use("/chat", messRoutes);
 app.use("/analyses", analysisRoutes);
 app.use("/menus", menuRoutes);
 
-const MONGO_URI = process.env.MONGO_URI ||
-  "mongodb+srv://bogdanpetcu02:Petcu123@cluster0.xwi6upv.mongodb.net/chatLicenta?retryWrites=true&w=majority&appName=Cluster0";
+const MONGO_URI = process.env.MONGO_URI;
 
 mongoose
   .connect(MONGO_URI)
